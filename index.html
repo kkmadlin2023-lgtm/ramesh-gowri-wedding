@@ -1,386 +1,464 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ta">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ramesh ♥ Gowri – Wedding Invitation</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ramesh ♥ Gowri – திருமண அழைப்பிதழ்</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Noto+Serif+Tamil:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
-  <!-- Petal canvas -->
-  <canvas id="petalsCanvas"></canvas>
+<!-- ═══ PETALS CANVAS ═══ -->
+<canvas id="petalsCanvas"></canvas>
 
-  <!-- ── NAV ── -->
-  <nav class="nav" id="navbar">
-    <div class="nav-logo">R ♥ G</div>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#hero">Home</a></li>
-      <li><a href="#invitation">Invitation</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#countdown">Countdown</a></li>
-      <li><a href="#rsvp">RSVP</a></li>
-    </ul>
-    <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
-  </nav>
+<!-- ═══ BANANA TREES (Fixed Left & Right) ═══ -->
+<div class="banana-tree bt-left" aria-hidden="true">
+  <div class="bt-leaves">
+    <div class="bt-leaf bl-1"></div>
+    <div class="bt-leaf bl-2"></div>
+    <div class="bt-leaf bl-3"></div>
+    <div class="bt-leaf bl-4"></div>
+    <div class="bt-leaf bl-5"></div>
+    <div class="bt-leaf bl-6"></div>
+    <div class="bt-leaf bl-7"></div>
+  </div>
+  <div class="bt-trunk"></div>
+  <div class="bt-base"></div>
+</div>
+<div class="banana-tree bt-right" aria-hidden="true">
+  <div class="bt-leaves">
+    <div class="bt-leaf bl-1"></div>
+    <div class="bt-leaf bl-2"></div>
+    <div class="bt-leaf bl-3"></div>
+    <div class="bt-leaf bl-4"></div>
+    <div class="bt-leaf bl-5"></div>
+    <div class="bt-leaf bl-6"></div>
+    <div class="bt-leaf bl-7"></div>
+  </div>
+  <div class="bt-trunk"></div>
+  <div class="bt-base"></div>
+</div>
 
-  <!-- ── HERO ── -->
-  <section class="hero" id="hero">
-    <div class="hero-bg">
-      <div class="hero-ring r1"></div>
-      <div class="hero-ring r2"></div>
+<!-- ═══ NAV ═══ -->
+<nav class="nav" id="navbar">
+  <div class="nav-logo">R ♥ G</div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#invitation">Invitation</a></li>
+    <li><a href="#details">Details</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#countdown">Countdown</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- ═══ HERO – VIDEO BACKGROUND ═══ -->
+<section class="hero" id="hero">
+
+  <!-- Video / Fallback Background -->
+  <div class="hero-bg-layer">
+    <video id="bgVideo" autoplay muted loop playsinline></video>
+    <div class="hero-fallback-bg" id="heroFallback">
+      <!-- Animated watercolor rings -->
+      <div class="wc-blob b1"></div>
+      <div class="wc-blob b2"></div>
+      <div class="wc-blob b3"></div>
     </div>
-    <div class="hero-body">
-      <p class="hero-eyebrow reveal">ஒரு புதிய தொடக்கம்</p>
-      <h1 class="hero-title reveal d1">
-        <span class="script-name">Ramesh</span>
-        <span class="hero-amp">♥</span>
-        <span class="script-name">Gowri</span>
-      </h1>
-      <p class="hero-tamil reveal d2">அவளும் நானும் · Avalum Naanum</p>
-      <p class="hero-date reveal d3">01 · 11 · 2026 &nbsp;|&nbsp; Sunday</p>
-      <p class="hero-venue reveal d3">Krishna Marriage Hall, Suceendram</p>
-      <a href="#invitation" class="btn-primary reveal d4">View Invitation ↓</a>
-    </div>
-    <div class="hero-image reveal d2">
-      <img src="couple-cartoon.jpg" alt="Ramesh & Gowri" />
-    </div>
-    <div class="scroll-cue"><div class="sc-arrow"></div></div>
-  </section>
+    <div class="hero-overlay"></div>
+  </div>
 
-  <!-- ── INVITATION TRIFOLD ── -->
-  <section class="section-invite" id="invitation">
-    <div class="invite-wrap" id="inviteWrap">
+  <!-- Video drop zone (shown when no video loaded) -->
+  <label class="video-drop-zone" id="videoDropZone" for="videoFileInput">
+    <span class="vdz-icon">🎬</span>
+    <p>உங்கள் திருமண வீடியோவை இங்கே இணைக்கவும்</p>
+    <small>Click or drag your wedding video here as background</small>
+    <input type="file" id="videoFileInput" accept="video/*" hidden/>
+  </label>
 
-      <!-- LEFT PANEL -->
-      <div class="panel panel-left">
-        <div class="pl-watermark"></div>
-        <div class="pl-top">
-          <p class="pl-label">WEDDING INVITATION</p>
-          <div class="pl-monogram">RG</div>
-          <h2 class="pl-names">
+  <!-- Content -->
+  <div class="hero-content">
+    <p class="hero-eyebrow">ஒரு புதிய தொடக்கம்</p>
+    <div class="hero-names">
+      <span class="hn-name hn-groom">Ramesh</span>
+      <span class="hn-heart">♥</span>
+      <span class="hn-name hn-bride">Gowri</span>
+    </div>
+    <p class="hero-tagline">அவளும் நானும்</p>
+    <div class="hero-meta">
+      <p>01 · 11 · 2026 &nbsp;|&nbsp; ஞாயிற்றுக்கிழமை</p>
+      <p>கிருஷ்ணா திருமண மண்டபம் · சுசீந்திரம்</p>
+    </div>
+    <a href="#invitation" class="btn-hero">அழைப்பிதழ் காண ↓</a>
+  </div>
+
+  <!-- Couple illustration -->
+  <div class="hero-couple">
+    <img src="couple-cartoon.jpg" alt="Ramesh and Gowri"/>
+  </div>
+
+  <div class="scroll-cue"><div class="sc-arr"></div></div>
+</section>
+
+<!-- ═══ INVITATION SLIDER ═══ -->
+<section class="section-invite" id="invitation">
+  <div class="section-hd reveal">
+    <p class="eyebrow">மணமக்கள் அழைக்கின்றனர்</p>
+    <h2 class="sec-title">திருமண அழைப்பிதழ்</h2>
+    <p class="swipe-hint">← துடைக்கவும் / Swipe to explore →</p>
+  </div>
+
+  <div class="invite-slider-wrap">
+    <button class="sl-btn sl-prev" id="slPrev" aria-label="Previous">&#8249;</button>
+
+    <div class="invite-slider" id="inviteSlider">
+      <div class="invite-track" id="inviteTrack">
+
+        <!-- ─── PANEL 1: COVER ─── -->
+        <div class="i-panel panel-cover">
+          <div class="panel-cover-bg"></div>
+          <div class="pc-leaf pc-leaf-tl"></div>
+          <div class="pc-leaf pc-leaf-br"></div>
+
+          <p class="pc-label">WEDDING INVITATION</p>
+          <div class="pc-monogram">RG</div>
+          <div class="pc-couple-names">
             <span>Ramesh</span>
-            <span class="pl-amp">&amp;</span>
+            <span class="pc-amp">&amp;</span>
             <span>Gowri</span>
-          </h2>
-          <p class="pl-tamil">அவளும் நானும்</p>
-          <p class="pl-roman">Avalum Naanum</p>
-        </div>
-        <div class="pl-image">
-          <img src="couple-cartoon.jpg" alt="Couple" />
-        </div>
-        <div class="pl-bottom">
-          <p class="pl-date-badge">01 · 11 · 2026</p>
-          <p class="pl-place">Krishna Marriage Hall<br/>Suceendram</p>
-        </div>
-      </div>
-
-      <!-- CENTER PANEL -->
-      <div class="panel panel-center">
-        <div class="pc-watermark"></div>
-
-        <!-- Invocation -->
-        <div class="pc-invocation">
-          <span class="om-symbol">ॐ</span>
-          <p class="pc-deities">
-            Sri Madasamy · Sri Periandavan · Sri Isakkiamman<br/>
-            Sri Pulamadathi · Sri Kathavarayan
-          </p>
-          <div class="pc-rule"></div>
-          <p class="pc-main-title">திருமண அழைப்பிதழ்</p>
-          <p class="pc-subtitle">WEDDING INVITATION</p>
-        </div>
-
-        <!-- Auspicious details -->
-        <div class="pc-muhurtham">
-          <p>
-            By the grace of Almighty God, in the auspicious year <strong>Aksaya</strong>,
-            month of <strong>Aippasi</strong>, 15th day,
-            under <strong>Pooradam</strong> star, <strong>Saptami</strong> tithi &amp; Subha Yoga —
-            the wedding will be solemnized between
-          </p>
-          <div class="pc-time-box">
-            <span>10:30 AM – 11:45 AM</span>
-            <small>Dhanus Lagna · Sunday, 01.11.2026</small>
+          </div>
+          <p class="pc-tamil-tag">அவளும் நானும்</p>
+          <div class="pc-img-wrap">
+            <img src="couple-cartoon.jpg" alt="Couple"/>
+          </div>
+          <div class="pc-bottom">
+            <div class="pc-date-pill">01 · 11 · 2026</div>
+            <p class="pc-venue-sm">கிருஷ்ணா திருமண மண்டபம்<br/>சுசீந்திரம்</p>
           </div>
         </div>
 
-        <div class="pc-rule-sm"></div>
+        <!-- ─── PANEL 2: MAIN INVITE ─── -->
+        <div class="i-panel panel-main">
+          <div class="pm-watermark"></div>
 
-        <!-- Groom block -->
-        <div class="pc-person pc-groom">
-          <p class="pc-role">BRIDEGROOM</p>
-          <h3 class="pc-person-name">M. Ramesh, D.E.C.E.</h3>
-          <p class="pc-native">Native: Vadaseri / Kottaram</p>
-          <div class="pc-family-tree">
-            <div class="ft-row">
-              <span class="ft-label">Grandparents (Late):</span>
-              <span>M. Ramasamy (a) Mukkanndi – Bhagavathiamman</span>
-            </div>
-            <div class="ft-row">
-              <span class="ft-label">Maternal Grandparents (Late):</span>
-              <span>S. Sundaram – Parvathi · Smt. Muthaachi</span>
-            </div>
-            <div class="ft-row">
-              <span class="ft-label">Parents:</span>
-              <span>Mr. R. Muthusivam (a) Sivathanu<br/>&amp; Mrs. S. Isakkiammal (a) Lakshmi</span>
+          <!-- Invocation -->
+          <div class="pm-invocation">
+            <span class="om">உ</span>
+            <p class="pm-deities">
+              மாடஸாமி சுடலை · பேச்சியம்மன் · இசக்கியம்மன்<br/>
+              ஸ்ரீ புலாமாடத்தி · ஸ்ரீ காத்தவராயன் துணை
+            </p>
+            <div class="pm-rule"></div>
+            <p class="pm-title-ta">திருமண அழைப்பிதழ்</p>
+            <p class="pm-title-en">WEDDING INVITATION</p>
+          </div>
+
+          <!-- Muhurtham -->
+          <div class="pm-muhurtham">
+            <p class="pm-muh-text">
+              எல்லாம் வல்ல இறைவன் திருவருளால் நிகழும்
+              <strong>அக்ஷய வருஷம் 1202</strong>-ம் ஆண்டு
+              <strong>ஐப்பசி மாதம் 15</strong>-ம் நாள்
+              <strong>(01.11.2026)</strong> ஞாயிற்றுக்கிழமை
+              <strong>பூர நட்சத்திரமும்</strong>, <strong>ஸப்தமி திதியும்</strong>
+              சுப நாம யோக சுபகரணமும் கூடிய
+            </p>
+            <div class="pm-time-box">
+              <span class="pm-time">காலை 10:30 – 11:45 மணி</span>
+              <small>தனுசு லக்னம் · Morning 10:30 – 11:45 AM</small>
             </div>
           </div>
-        </div>
 
-        <!-- Couple connector -->
-        <div class="pc-weds-line">
-          <span class="weds-deco">— ♥ —</span>
-          <span class="weds-text">weds</span>
-          <span class="weds-deco">— ♥ —</span>
-        </div>
+          <div class="pm-sep">— ♥ —</div>
 
-        <!-- Bride block -->
-        <div class="pc-person pc-bride">
-          <p class="pc-role">BRIDE</p>
-          <h3 class="pc-person-name">S. Gowri, B.Sc.(N)</h3>
-          <p class="pc-native">Native: Soorampatti / Nalloor</p>
-          <div class="pc-family-tree">
-            <div class="ft-row">
-              <span class="ft-label">Grandparents (Late):</span>
-              <span>V. Govindaraj – C. Angammal</span>
+          <!-- Groom -->
+          <div class="pm-person pm-groom">
+            <p class="pm-role">மணமகன்</p>
+            <div class="pm-person-name">
+              <span class="ta">M. ரமேஷ்</span>
+              <span class="en">D.E.C.E.</span>
             </div>
-            <div class="ft-row">
-              <span class="ft-label">Maternal Grandparents (Late):</span>
-              <span>K. Pavanasiyappan – P. Sudalaimadam</span>
+            <p class="pm-native">வடசேரி / கொட்டாரம்</p>
+            <div class="pm-lineage">
+              <div class="pm-lin-row">
+                <span class="pm-lin-lbl">தெய்வத்திருவாளர்கள்:</span>
+                <span>எம். ராமசாமி (எ) முக்காண்டி – பகவதியம்மாள்</span>
+              </div>
+              <div class="pm-lin-row">
+                <span class="pm-lin-lbl">தாய்வழி:</span>
+                <span>எஸ். சுந்தரம் – பார்வதி · திருமதி முத்தாச்சி</span>
+              </div>
+              <div class="pm-lin-row">
+                <span class="pm-lin-lbl">பெற்றோர்:</span>
+                <span>
+                  திரு. ஆர். முத்துசிவம் (எ) சிவதாணு<br/>
+                  – திருமதி எஸ். இசக்கியம்மாள் (எ) லட்சுமி
+                </span>
+              </div>
             </div>
-            <div class="ft-row">
-              <span class="ft-label">Parents:</span>
-              <span>Mr. K. Sankar<br/>&amp; Mrs. S. Veeralakshmi</span>
+          </div>
+
+          <!-- Weds -->
+          <div class="pm-weds">
+            <span class="pw-line">——</span>
+            <span class="pw-text">திருமணம் செய்துகொள்கிறார்கள்</span>
+            <span class="pw-line">——</span>
+          </div>
+
+          <!-- Bride -->
+          <div class="pm-person pm-bride">
+            <p class="pm-role">மணமகள்</p>
+            <div class="pm-person-name">
+              <span class="ta">S. கௌரி</span>
+              <span class="en">B.Sc(N)</span>
+            </div>
+            <p class="pm-native">சூரம்பட்டி / நல்லூர்</p>
+            <div class="pm-lineage">
+              <div class="pm-lin-row">
+                <span class="pm-lin-lbl">தெய்வத்திருவாளர்கள்:</span>
+                <span>வி. கோவிந்தராஜ் – சி. அங்கம்மாள்</span>
+              </div>
+              <div class="pm-lin-row">
+                <span class="pm-lin-lbl">தாய்வழி:</span>
+                <span>க. பவளசியப்பன் – ப. சுடலைமாடன்</span>
+              </div>
+              <div class="pm-lin-row">
+                <span class="pm-lin-lbl">பெற்றோர்:</span>
+                <span>
+                  திரு. கே. சங்கர்<br/>
+                  – திருமதி ச. வீராலெட்சுமி
+                </span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="pc-rule-sm"></div>
+          <div class="pm-sep">— ♥ —</div>
 
-        <!-- Venue & Request -->
-        <div class="pc-venue-block">
-          <p class="pc-venue-name">Krishna Marriage Hall</p>
-          <p class="pc-venue-place">Suceendram, Tamil Nadu</p>
-          <p class="pc-cordial">
-            With the blessings of elders, we warmly invite you and your family
-            to attend and bless the newlyweds. 🙏
-          </p>
-        </div>
-
-        <!-- Hosts -->
-        <div class="pc-hosts">
-          <div class="host-col">
-            <p class="host-role">Bride's Family</p>
-            <p>G. Sankar &amp; S. Veeralakshmi</p>
-            <p class="host-place">Nalloor</p>
-            <p class="host-ph">📞 9930524059</p>
-          </div>
-          <div class="host-divider">·</div>
-          <div class="host-col">
-            <p class="host-role">Groom's Family</p>
-            <p>R. Muthusivam &amp; S. Isakkiammal</p>
-            <p class="host-place">Nagercoil / Suceendram</p>
-            <p class="host-ph">📞 7598998769 · 7708233283</p>
-          </div>
-        </div>
-
-        <!-- Sibling note -->
-        <div class="pc-sibling-note">
-          <p><strong>Brother &amp; Sister-in-law:</strong> M. Senthilkumar &amp; S. Ramya</p>
-          <p><em>Children:</em> S. Ithavanika &nbsp;·&nbsp; S. Akaswin</p>
-          <p class="no-reception">⚠ No Evening Reception</p>
-        </div>
-
-      </div>
-
-      <!-- RIGHT PANEL -->
-      <div class="panel panel-right">
-        <div class="pr-watermark"></div>
-        <p class="pr-title">மனைவிட்டார்</p>
-        <p class="pr-subtitle">Family &amp; Relatives</p>
-        <div class="pr-rule"></div>
-
-        <div class="rel-section">
-          <p class="rel-heading">👰 Bride's Relations</p>
-
-          <div class="rel-group">
-            <p class="rel-sub">Grandmothers / Aunts</p>
-            <ul>
-              <li>Late D. Thangasundaran – Mrs. Thangakalaiselvi, Nalloor</li>
-              <li>Mrs. D. Arumugam (Late), Vengadapuram</li>
-            </ul>
-          </div>
-
-          <div class="rel-group">
-            <p class="rel-sub">Sisters / Brothers-in-law</p>
-            <ul>
-              <li>Late K. Rajendran – Mrs. D. Aruna (Late), Vengadapuram</li>
-              <li>Late K. Manikandan – Mrs. M. Muthulakshmi, Nalloor</li>
-              <li>Late M. Manikandan – Mrs. M. Suseela, Nalloor</li>
-            </ul>
-          </div>
-
-          <div class="rel-group">
-            <p class="rel-sub">Uncles / Aunts</p>
-            <ul>
-              <li>Late M. Ramachandran – Mrs. M. Murugeshwari, Nampatti</li>
-              <li>Late M. Sankar – Mrs. M. Bharati, Vengadapuram</li>
-              <li>Late M. Arumugam</li>
-            </ul>
-          </div>
-
-          <div class="rel-group">
-            <p class="rel-sub">Brothers / Sisters-in-law</p>
-            <ul>
-              <li>Mr. R. Sivakumar – Mrs. S. Manimegalai, Nalloor</li>
-              <li>Mr. Selvamani – Mrs. S. Saranya</li>
-            </ul>
-          </div>
-
-          <div class="rel-group">
-            <p class="rel-sub">Brothers / Sisters</p>
-            <ul>
-              <li>Mr. Saravanan – Mrs. S. Anbuselvi, Puthoor</li>
-              <li>Mr. M. Arunkumar – Mrs. A. Bhuvaneshwari, Vengadapuram</li>
-              <li>Mr. M. Santhoshkumar, Vengadapuram</li>
-              <li>Mr. M. Maniyarasu – Mrs. M. Priya, Vengadapuram</li>
-              <li>Mr. Saranraj, Vengadapuram</li>
-            </ul>
-          </div>
-
-          <div class="rel-group">
-            <p class="rel-sub">Nephews / Nieces</p>
-            <ul>
-              <li>S. Sivanandaperumal &nbsp;·&nbsp; S. Mahalakshmi</li>
-              <li>M. Shanmugamani &nbsp;·&nbsp; M. Nithyasri</li>
-            </ul>
-          </div>
-
-          <div class="rel-group">
-            <p class="rel-sub">Grandchildren &amp; Little Ones</p>
-            <p class="rel-kids">
-              A. Praneeth · M. Deepan · R. Divyashree · S. Illamarasu ·
-              C. Dhansikadevi · S. Nishanth · S. Illamaran · M. Pavithra ·
-              B. Akshaya · M. Maarisundaran ·
-              Anju · Poojasri · Akshara
+          <!-- Venue -->
+          <div class="pm-venue">
+            <p class="pm-venue-name">கிருஷ்ணா திருமண மண்டபம்</p>
+            <p class="pm-venue-loc">சுசீந்திரம், அங்காரை · Suceendram</p>
+            <p class="pm-invite-msg">
+              இவர்களது திருமணத்திற்கும் விருந்து உபசாரங்களிலும்
+              தாங்கள் குடும்பசகிதம் வருகை தந்து மணமக்களை
+              வாழ்த்தியனுப்ப அன்புடன் அழைக்கிறோம். 🙏
             </p>
           </div>
+
+          <!-- Hosts -->
+          <div class="pm-hosts">
+            <div class="ph-col">
+              <p class="ph-role">மணமகள் வீட்டார்</p>
+              <p>G. சங்கர் &amp; S. வீராலெட்சுமி</p>
+              <p class="ph-place">நல்லூர்</p>
+              <p class="ph-num">📞 9930524059</p>
+            </div>
+            <div class="ph-sep">·</div>
+            <div class="ph-col">
+              <p class="ph-role">மணமகன் வீட்டார்</p>
+              <p>R. முத்துசிவம் &amp; S. இசக்கியம்மாள்</p>
+              <p class="ph-place">நாகர்கோவில் · சுசீந்திரம்</p>
+              <p class="ph-num">📞 7598998769 · 7708233283</p>
+            </div>
+          </div>
+
+          <!-- Sibling block -->
+          <div class="pm-siblings">
+            <p><strong>அண்ணன் – அண்ணி:</strong> M. செந்தில்குமார் – S. ரம்யா</p>
+            <p><em>குழந்தைகள்:</em> S. இதவானிகா &nbsp;·&nbsp; S. அகஸ்வின்</p>
+            <p class="pm-no-rec">⚠ மாலை வரவேற்பு இல்லை · No Evening Reception</p>
+          </div>
         </div>
 
-        <div class="pr-footer-note">
-          <p>With warm greetings from all</p>
-          <p>Friends &amp; Relatives 🙏</p>
+        <!-- ─── PANEL 3: RELATIVES ─── -->
+        <div class="i-panel panel-relatives">
+          <div class="pr-bg"></div>
+          <p class="pr-heading">மணமகள் வீட்டார்</p>
+          <p class="pr-sub">Family &amp; Relatives</p>
+          <div class="pr-divider"></div>
+
+          <div class="pr-content">
+
+            <div class="rel-block">
+              <p class="rel-cat">தாய்மாமன் – அத்தை</p>
+              <ul>
+                <li>திரு. D. தங்கசுந்தரன் (காலஞ்சென்ற) – திருமதி D. தங்ககலைசெல்வி, நல்லூர்</li>
+                <li>திரு. D. ஆறுமுகம் (காலஞ்சென்ற), வெங்கடாபுரம்</li>
+              </ul>
+            </div>
+
+            <div class="rel-block">
+              <p class="rel-cat">சகோதரி – சகலை</p>
+              <ul>
+                <li>திரு. K. ராஜேந்திரன் (கா.) – திருமதி D. அருணா (கா.), வெங்கடாபுரம்</li>
+                <li>திரு. K. மணிகண்டன் (கா.) – திருமதி M. முத்துலெட்சுமி, கொக்கட்டி</li>
+                <li>திரு. M. மணிகண்டன் (கா.) – திருமதி M. சுசீலா, நல்லூர்</li>
+              </ul>
+            </div>
+
+            <div class="rel-block">
+              <p class="rel-cat">அத்தான் – மாமியார்</p>
+              <ul>
+                <li>திருமதி M. ராமச்சந்திரன் (கா.) – திரு M. முருகேசன், நம்பட்டி</li>
+                <li>திருமதி M. சங்கர் (கா.) – திரு M. பாரதி, வெங்கடாபுரம்</li>
+                <li>திருமதி M. ஆறுமுகம் (காலஞ்சென்ற)</li>
+              </ul>
+            </div>
+
+            <div class="rel-block">
+              <p class="rel-cat">அண்ணன் – அண்ணி</p>
+              <ul>
+                <li>திரு. R. சிவகுமார் – திருமதி S. மணிமேகலை, நல்லூர்</li>
+                <li>திரு. செல்வமணி – திருமதி S. சரண்யா</li>
+              </ul>
+            </div>
+
+            <div class="rel-block">
+              <p class="rel-cat">அண்ணன் – அண்ணி</p>
+              <ul>
+                <li>திரு. சரவணன் – திருமதி S. அன்புச்செல்வி, புதூர்</li>
+                <li>திரு. M. அருண்குமார் – திருமதி A. புவனேஸ்வரி, வெங்கடாபுரம்</li>
+                <li>திரு. M. சந்தோஷ்குமார், வெங்கடாபுரம்</li>
+                <li>திரு. M. மணியரசு – திருமதி M. பிரியா, வெங்கடாபுரம்</li>
+                <li>திரு. சரண்ராஜ், வெங்கடாபுரம்</li>
+              </ul>
+            </div>
+
+            <div class="rel-block">
+              <p class="rel-cat">தம்பி – தங்கை</p>
+              <ul>
+                <li>S. வைகுண்டபெருமாள்</li>
+                <li>S. மகாலெட்சுமி</li>
+                <li>M. சண்முகமணி</li>
+                <li>M. நித்யாதேவி</li>
+              </ul>
+            </div>
+
+            <div class="rel-block">
+              <p class="rel-cat">மருமக்கள் / பேரக்குழந்தைகள்</p>
+              <p class="rel-kids-list">
+                A. பிரனீத் · M. தீபன் · R. திவ்யாஸ்ரீ · S. இளமாறன் ·
+                C. தனஸிகாதேவி · S. நிஷாந்த் · S. இளமாறன் ·
+                M. பவித்ரா · B. அக்ஷயா · M. மாரி சுந்தரன்
+              </p>
+            </div>
+
+            <div class="rel-block rel-little-ones">
+              <p class="rel-cat">எங்கள் வீட்டு குட்டிச்செல்வங்கள் 🍬</p>
+              <p class="rel-kids-list">அஞ்சு &nbsp;·&nbsp; பூஜாஸ்ரீ &nbsp;·&nbsp; அக்ஷரா</p>
+            </div>
+
+            <div class="pr-closing">
+              <p>நங்கள் நல்வரவை அன்புடன் விரும்பும்</p>
+              <p class="pr-closing-bold">சுற்றமும் நட்பும் 🙏</p>
+            </div>
+          </div>
         </div>
-      </div>
 
-    </div><!-- /invite-wrap -->
+      </div><!-- /invite-track -->
+    </div><!-- /invite-slider -->
 
-    <!-- Drag hint for desktop -->
-    <div class="invite-drag-note" id="dragNote">✋ Drag the invitation to move</div>
-  </section>
+    <button class="sl-btn sl-next" id="slNext" aria-label="Next">&#8250;</button>
 
-  <!-- ── EVENT DETAILS ── -->
-  <section class="section-details" id="details">
-    <div class="section-hd">
-      <p class="eyebrow">Join Us</p>
-      <h2 class="sec-title">Ceremony Details</h2>
+    <div class="sl-dots" id="slDots">
+      <span class="sl-dot active" data-idx="0" title="அட்டைப்படம்"></span>
+      <span class="sl-dot" data-idx="1" title="அழைப்பிதழ்"></span>
+      <span class="sl-dot" data-idx="2" title="உறவினர்கள்"></span>
     </div>
-    <div class="details-grid">
-      <div class="detail-card reveal-card">
-        <div class="dc-icon">🌅</div>
-        <h3>Wedding Ceremony</h3>
-        <p class="dc-dt">Sunday, 01 November 2026</p>
-        <p class="dc-tm">10:30 AM – 11:45 AM</p>
-        <p class="dc-lagna">Dhanus Lagna · Pooradam Star</p>
-        <p class="dc-place">Krishna Marriage Hall<br/>Suceendram</p>
-      </div>
-      <div class="detail-card reveal-card">
-        <div class="dc-icon">🍽</div>
-        <h3>Grand Feast</h3>
-        <p class="dc-dt">Sunday, 01 November 2026</p>
-        <p class="dc-tm">From 12:00 PM Onwards</p>
-        <p class="dc-place">Krishna Marriage Hall<br/>Suceendram</p>
-        <p class="dc-note">No Evening Reception</p>
-      </div>
-      <div class="detail-card reveal-card">
-        <div class="dc-icon">📍</div>
-        <h3>Venue</h3>
-        <p class="dc-place" style="font-size:1.05rem;">Krishna Marriage Hall</p>
-        <p class="dc-lagna">Suceendram, Kanyakumari District</p>
-        <p class="dc-lagna">Tamil Nadu</p>
-        <a class="dc-map-btn" href="https://maps.google.com/?q=Sucindram,Tamil+Nadu" target="_blank">Get Directions →</a>
-      </div>
+  </div><!-- /invite-slider-wrap -->
+</section>
+
+<!-- ═══ CEREMONY DETAILS ═══ -->
+<section class="section-details" id="details">
+  <div class="section-hd reveal">
+    <p class="eyebrow">திருமண நிகழ்வுகள்</p>
+    <h2 class="sec-title">Ceremony Details</h2>
+  </div>
+  <div class="details-cards">
+    <div class="det-card reveal-card">
+      <div class="dc-icon">🌅</div>
+      <h3>திருமண நிகழ்வு</h3>
+      <p class="dc-en">Wedding Ceremony</p>
+      <p class="dc-date">ஞாயிறு, 01 நவம்பர் 2026</p>
+      <p class="dc-time">காலை 10:30 – 11:45 மணி</p>
+      <p class="dc-lagna">தனுசு லக்னம் · பூர நட்சத்திரம்</p>
+      <p class="dc-venue">கிருஷ்ணா திருமண மண்டபம்<br/>சுசீந்திரம்</p>
     </div>
-  </section>
-
-  <!-- ── COUNTDOWN ── -->
-  <section class="section-countdown" id="countdown">
-    <div class="cd-bg-ring r1"></div>
-    <div class="cd-bg-ring r2"></div>
-    <div class="cd-content">
-      <p class="eyebrow light">Save the Date</p>
-      <h2 class="sec-title light">November 1, 2026</h2>
-      <div class="cd-timer">
-        <div class="cd-unit"><div class="cd-num" id="cd-days">---</div><div class="cd-lbl">Days</div></div>
-        <div class="cd-sep">:</div>
-        <div class="cd-unit"><div class="cd-num" id="cd-hours">--</div><div class="cd-lbl">Hours</div></div>
-        <div class="cd-sep">:</div>
-        <div class="cd-unit"><div class="cd-num" id="cd-mins">--</div><div class="cd-lbl">Minutes</div></div>
-        <div class="cd-sep">:</div>
-        <div class="cd-unit"><div class="cd-num" id="cd-secs">--</div><div class="cd-lbl">Seconds</div></div>
-      </div>
+    <div class="det-card reveal-card">
+      <div class="dc-icon">🍽</div>
+      <h3>விருந்து உபசாரம்</h3>
+      <p class="dc-en">Grand Feast</p>
+      <p class="dc-date">ஞாயிறு, 01 நவம்பர் 2026</p>
+      <p class="dc-time">பகல் 12:00 மணி முதல்</p>
+      <p class="dc-venue">கிருஷ்ணா திருமண மண்டபம்<br/>சுசீந்திரம்</p>
+      <p class="dc-note">மாலை வரவேற்பு இல்லை</p>
     </div>
-  </section>
-
-  <!-- ── RSVP ── -->
-  <section class="section-rsvp" id="rsvp">
-    <div class="section-hd">
-      <p class="eyebrow">You're Invited</p>
-      <h2 class="sec-title">Will You Join Us?</h2>
-      <p class="sec-desc">Let us know you're coming — your presence is our blessing.</p>
+    <div class="det-card reveal-card">
+      <div class="dc-icon">📍</div>
+      <h3>திருமண இடம்</h3>
+      <p class="dc-en">Venue</p>
+      <p class="dc-venue-big">கிருஷ்ணா திருமண மண்டபம்</p>
+      <p class="dc-lagna">சுசீந்திரம், அங்காரை</p>
+      <p class="dc-lagna">Suceendram, Kanyakumari Dist.</p>
+      <a class="dc-map" href="https://maps.google.com/?q=Sucindram+Tamil+Nadu" target="_blank">வழிகாட்டி பெற →</a>
     </div>
-    <form class="rsvp-form" id="rsvpForm">
-      <div class="form-row">
-        <div class="form-group">
-          <label>Your Name</label>
-          <input type="text" placeholder="Full name" required />
-        </div>
-        <div class="form-group">
-          <label>Phone / WhatsApp</label>
-          <input type="tel" placeholder="+91 XXXXX XXXXX" />
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Number of Guests</label>
-          <select>
-            <option>1 Person</option><option>2 People</option>
-            <option>3 People</option><option>4+ People</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Message</label>
-          <input type="text" placeholder="Your blessings..." />
-        </div>
-      </div>
-      <button type="submit" class="btn-rsvp">💌 Confirm Attendance</button>
-      <div class="rsvp-ok" id="rsvpOk" style="display:none">✅ Thank you! See you on November 1st 🎊</div>
-    </form>
-  </section>
+  </div>
+</section>
 
-  <!-- ── FOOTER ── -->
-  <footer class="footer">
-    <div class="footer-mono">RG</div>
-    <p class="footer-names">Ramesh ♥ Gowri</p>
-    <p class="footer-date">01 · 11 · 2026 · Suceendram</p>
-    <p class="footer-quote">"அவளும் நானும் — forever."</p>
-    <p class="footer-credit">Made with ♥</p>
-  </footer>
+<!-- ═══ GALLERY ═══ -->
+<section class="section-gallery" id="gallery">
+  <div class="section-hd reveal">
+    <p class="eyebrow">Our Journey</p>
+    <h2 class="sec-title">Memories &amp; Moments</h2>
+  </div>
+  <div class="gallery-grid">
+    <div class="gal-item gi-tall">
+      <img src="couple-cartoon.jpg" alt="Ramesh and Gowri"/>
+      <div class="gal-ov"><p>Ramesh ♥ Gowri</p></div>
+    </div>
+    <div class="gal-item">
+      <img src="invite-card.jpg" alt="Invitation"/>
+      <div class="gal-ov"><p>அழைப்பிதழ்</p></div>
+    </div>
+    <div class="gal-item">
+      <img src="save-date.jpg" alt="Save the Date"/>
+      <div class="gal-ov"><p>நவம்பர் 2026</p></div>
+    </div>
+  </div>
+</section>
 
-  <script src="script.js"></script>
+<!-- ═══ COUNTDOWN ═══ -->
+<section class="section-countdown" id="countdown">
+  <div class="cd-deco r1"></div>
+  <div class="cd-deco r2"></div>
+  <div class="cd-inner">
+    <p class="eyebrow light">நாட்கணக்கு · Save the Date</p>
+    <h2 class="sec-title light">நவம்பர் 1, 2026</h2>
+    <p class="cd-sub">Krishna Marriage Hall, Suceendram</p>
+    <div class="cd-timer">
+      <div class="cd-box"><div class="cd-num" id="cd-days">--</div><div class="cd-lbl">நாட்கள்</div></div>
+      <div class="cd-colon">:</div>
+      <div class="cd-box"><div class="cd-num" id="cd-hours">--</div><div class="cd-lbl">மணி</div></div>
+      <div class="cd-colon">:</div>
+      <div class="cd-box"><div class="cd-num" id="cd-mins">--</div><div class="cd-lbl">நிமிடம்</div></div>
+      <div class="cd-colon">:</div>
+      <div class="cd-box"><div class="cd-num" id="cd-secs">--</div><div class="cd-lbl">விநாடி</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <div class="ft-monogram">RG</div>
+  <p class="ft-names">Ramesh ♥ Gowri</p>
+  <p class="ft-tagline">அவளும் நானும்</p>
+  <p class="ft-date">01 · 11 · 2026 &nbsp;·&nbsp; சுசீந்திரம்</p>
+  <div class="ft-lotus">🪷 &nbsp; 🪷 &nbsp; 🪷</div>
+  <p class="ft-credit">Made with ♥ for Ramesh &amp; Gowri</p>
+</footer>
+
+<script src="script.js"></script>
 </body>
 </html>

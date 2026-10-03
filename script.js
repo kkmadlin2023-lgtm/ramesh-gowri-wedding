@@ -1,13 +1,13 @@
-/* =======================================
+/* ==============================================
    script.js – Ramesh & Gowri Wedding
-   Medium animations, clean & smooth
-   ======================================= */
+   ============================================== */
 
-// ── 1. FALLING PETALS (light) ──
-(function () {
+// ── 1. FALLING PETALS ──────────────────────────
+(function initPetals() {
   const canvas = document.getElementById('petalsCanvas');
+  if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  const EMOJIS = ['🌸', '🪷', '✿', '❀', '🌺'];
+  const GLYPHS = ['🌸', '🪷', '✿', '❀', '🌺', '🌼'];
   let petals = [];
 
   function resize() {
@@ -18,24 +18,26 @@
   window.addEventListener('resize', resize);
 
   class Petal {
-    constructor() { this.reset(true); }
-    reset(init) {
+    constructor(init) {
       this.x     = Math.random() * canvas.width;
       this.y     = init ? Math.random() * canvas.height : -20;
-      this.size  = Math.random() * 12 + 7;
-      this.speed = Math.random() * 1.2 + 0.4;
+      this.size  = Math.random() * 12 + 6;
+      this.speed = Math.random() * 1.1 + 0.4;
       this.sway  = Math.random() * 0.7 + 0.2;
-      this.swayOff = Math.random() * Math.PI * 2;
+      this.off   = Math.random() * Math.PI * 2;
       this.rot   = Math.random() * Math.PI * 2;
-      this.rotSpd = (Math.random() - 0.5) * 0.03;
-      this.glyph = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
-      this.alpha = Math.random() * 0.45 + 0.2;
+      this.rotS  = (Math.random() - 0.5) * 0.025;
+      this.glyph = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+      this.alpha = Math.random() * 0.4 + 0.15;
     }
     update(t) {
       this.y += this.speed;
-      this.x += Math.sin(t * 0.0008 + this.swayOff) * this.sway;
-      this.rot += this.rotSpd;
-      if (this.y > canvas.height + 20) this.reset(false);
+      this.x += Math.sin(t * 0.0007 + this.off) * this.sway;
+      this.rot += this.rotS;
+      if (this.y > canvas.height + 20) {
+        this.x = Math.random() * canvas.width;
+        this.y = -20;
+      }
     }
     draw() {
       ctx.save();
@@ -50,7 +52,7 @@
     }
   }
 
-  for (let i = 0; i < 20; i++) petals.push(new Petal());
+  for (let i = 0; i < 22; i++) petals.push(new Petal(true));
 
   (function loop(t) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -60,8 +62,8 @@
 })();
 
 
-// ── 2. NAVBAR ──
-(function () {
+// ── 2. NAVBAR ──────────────────────────────────
+(function initNav() {
   const nav  = document.getElementById('navbar');
   const ham  = document.getElementById('hamburger');
   const list = document.getElementById('navLinks');
@@ -71,83 +73,142 @@
   }, { passive: true });
 
   ham.addEventListener('click', () => list.classList.toggle('open'));
-  list.querySelectorAll('a').forEach(a => a.addEventListener('click', () => list.classList.remove('open')));
+  list && list.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => list.classList.remove('open'));
+  });
 })();
 
 
-// ── 3. DRAGGABLE INVITATION ──
-(function () {
-  const wrap = document.getElementById('inviteWrap');
-  const note = document.getElementById('dragNote');
-  if (!wrap) return;
+// ── 3. VIDEO BACKGROUND ────────────────────────
+(function initVideo() {
+  const dropZone  = document.getElementById('videoDropZone');
+  const fileInput = document.getElementById('videoFileInput');
+  const videoEl   = document.getElementById('bgVideo');
+  const fallback  = document.getElementById('heroFallback');
+  if (!videoEl) return;
 
-  let drag = false, sx, sy, ox, oy, moved = false;
-  const THRESHOLD = 5;
-
-  function getOffset() {
-    const s = wrap.style;
-    return {
-      x: parseInt(s.marginLeft || '0') || 0,
-      y: parseInt(s.marginTop  || '0') || 0
-    };
+  function loadVideo(file) {
+    if (!file || !file.type.startsWith('video/')) return;
+    const url = URL.createObjectURL(file);
+    videoEl.src = url;
+    videoEl.style.display = 'block';
+    fallback.style.display = 'none';
+    dropZone && (dropZone.style.display = 'none');
+    videoEl.play().catch(() => {});
   }
 
-  wrap.addEventListener('mousedown', e => {
-    drag = true; moved = false;
-    sx = e.clientX; sy = e.clientY;
-    const o = getOffset();
-    ox = o.x; oy = o.y;
-    wrap.classList.add('dragging');
-    note && (note.style.display = 'none');
+  fileInput && fileInput.addEventListener('change', e => loadVideo(e.target.files[0]));
+
+  // Drag & drop on hero
+  const hero = document.getElementById('hero');
+  hero && hero.addEventListener('dragover', e => {
     e.preventDefault();
+    dropZone && (dropZone.style.borderColor = 'var(--g-mid)');
   });
-
-  document.addEventListener('mousemove', e => {
-    if (!drag) return;
-    const dx = e.clientX - sx, dy = e.clientY - sy;
-    if (Math.abs(dx) > THRESHOLD || Math.abs(dy) > THRESHOLD) moved = true;
-    wrap.style.marginLeft = (ox + dx) + 'px';
-    wrap.style.marginTop  = (oy + dy) + 'px';
+  hero && hero.addEventListener('dragleave', () => {
+    dropZone && (dropZone.style.borderColor = '');
   });
-
-  document.addEventListener('mouseup', () => {
-    if (!drag) return;
-    drag = false;
-    wrap.classList.remove('dragging');
-  });
-
-  // Touch
-  wrap.addEventListener('touchstart', e => {
-    const t = e.touches[0];
-    drag = true; moved = false;
-    sx = t.clientX; sy = t.clientY;
-    const o = getOffset();
-    ox = o.x; oy = o.y;
-    note && (note.style.display = 'none');
-  }, { passive: true });
-
-  document.addEventListener('touchmove', e => {
-    if (!drag) return;
-    const t = e.touches[0];
-    const dx = t.clientX - sx, dy = t.clientY - sy;
-    if (Math.abs(dx) > THRESHOLD || Math.abs(dy) > THRESHOLD) moved = true;
-    wrap.style.marginLeft = (ox + dx) + 'px';
-    wrap.style.marginTop  = (oy + dy) + 'px';
+  hero && hero.addEventListener('drop', e => {
     e.preventDefault();
-  }, { passive: false });
-
-  document.addEventListener('touchend', () => { drag = false; });
+    loadVideo(e.dataTransfer.files[0]);
+  });
 })();
 
 
-// ── 4. COUNTDOWN ──
-(function () {
+// ── 4. INVITATION SLIDER ──────────────────────
+(function initSlider() {
+  const track  = document.getElementById('inviteTrack');
+  const slider = document.getElementById('inviteSlider');
+  const prevBtn = document.getElementById('slPrev');
+  const nextBtn = document.getElementById('slNext');
+  const dots   = document.querySelectorAll('.sl-dot');
+  if (!track) return;
+
+  let cur = 0;
+  const total = 3;
+  let startX = 0, startY = 0, isDragging = false, moved = false;
+
+  function isMobile() { return window.innerWidth < 900; }
+
+  function goTo(idx) {
+    if (!isMobile()) return;
+    cur = Math.max(0, Math.min(total - 1, idx));
+    track.style.transform = `translateX(-${cur * 100}%)`;
+    dots.forEach((d, i) => d.classList.toggle('active', i === cur));
+  }
+
+  // Button clicks
+  prevBtn && prevBtn.addEventListener('click', () => goTo(cur - 1));
+  nextBtn && nextBtn.addEventListener('click', () => goTo(cur + 1));
+
+  // Dot clicks
+  dots.forEach(d => d.addEventListener('click', () => goTo(parseInt(d.dataset.idx))));
+
+  // ─── TOUCH SWIPE ───────────────────────────
+  slider && slider.addEventListener('touchstart', e => {
+    if (!isMobile()) return;
+    const t = e.touches[0];
+    startX = t.clientX;
+    startY = t.clientY;
+    isDragging = true;
+    moved = false;
+  }, { passive: true });
+
+  slider && slider.addEventListener('touchmove', e => {
+    if (!isDragging || !isMobile()) return;
+    const t = e.touches[0];
+    const dx = t.clientX - startX;
+    const dy = t.clientY - startY;
+    if (Math.abs(dx) > Math.abs(dy)) {
+      moved = true;
+      e.preventDefault(); // prevent vertical scroll when swiping horizontally
+    }
+  }, { passive: false });
+
+  slider && slider.addEventListener('touchend', e => {
+    if (!isDragging || !isMobile()) return;
+    isDragging = false;
+    if (!moved) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 48) {
+      goTo(dx < 0 ? cur + 1 : cur - 1);
+    }
+  });
+
+  // ─── MOUSE DRAG (desktop slider preview) ───
+  slider && slider.addEventListener('mousedown', e => {
+    if (!isMobile()) return;
+    startX = e.clientX;
+    isDragging = true; moved = false;
+  });
+  document.addEventListener('mousemove', e => {
+    if (!isDragging || !isMobile()) return;
+    if (Math.abs(e.clientX - startX) > 5) moved = true;
+  });
+  document.addEventListener('mouseup', e => {
+    if (!isDragging || !isMobile()) return;
+    isDragging = false;
+    if (!moved) return;
+    const dx = e.clientX - startX;
+    if (Math.abs(dx) > 48) goTo(dx < 0 ? cur + 1 : cur - 1);
+  });
+
+  // Reset on resize
+  window.addEventListener('resize', () => {
+    if (!isMobile()) {
+      track.style.transform = '';
+    } else {
+      goTo(cur);
+    }
+  });
+})();
+
+
+// ── 5. COUNTDOWN ──────────────────────────────
+(function initCountdown() {
   const target = new Date('2026-11-01T10:30:00+05:30');
-  const els = {
-    days:  document.getElementById('cd-days'),
-    hours: document.getElementById('cd-hours'),
-    mins:  document.getElementById('cd-mins'),
-    secs:  document.getElementById('cd-secs')
+  const ids = {
+    days: 'cd-days', hours: 'cd-hours', mins: 'cd-mins', secs: 'cd-secs'
   };
 
   function pad(n, l = 2) { return String(n).padStart(l, '0'); }
@@ -155,26 +216,34 @@
   function tick() {
     const diff = target - Date.now();
     if (diff <= 0) {
-      Object.values(els).forEach(el => { if (el) el.textContent = '00'; });
+      Object.values(ids).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = '00';
+      });
       return;
     }
     const d = Math.floor(diff / 86400000);
     const h = Math.floor((diff % 86400000) / 3600000);
     const m = Math.floor((diff % 3600000)  / 60000);
     const s = Math.floor((diff % 60000)    / 1000);
-    if (els.days)  els.days.textContent  = pad(d, 3);
-    if (els.hours) els.hours.textContent = pad(h);
-    if (els.mins)  els.mins.textContent  = pad(m);
-    if (els.secs)  els.secs.textContent  = pad(s);
+
+    const dEl = document.getElementById(ids.days);
+    const hEl = document.getElementById(ids.hours);
+    const mEl = document.getElementById(ids.mins);
+    const sEl = document.getElementById(ids.secs);
+    if (dEl) dEl.textContent = pad(d, 3);
+    if (hEl) hEl.textContent = pad(h);
+    if (mEl) mEl.textContent = pad(m);
+    if (sEl) sEl.textContent = pad(s);
   }
   tick();
   setInterval(tick, 1000);
 })();
 
 
-// ── 5. SCROLL REVEAL ──
-(function () {
-  const obs = new IntersectionObserver((entries) => {
+// ── 6. SCROLL REVEAL ──────────────────────────
+(function initReveal() {
+  const obs = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) {
         e.target.classList.add('visible');
@@ -183,38 +252,30 @@
     });
   }, { threshold: 0.12 });
 
-  document.querySelectorAll('.reveal-card').forEach(el => obs.observe(el));
+  document.querySelectorAll('.reveal-card, .det-card, .gal-item').forEach(el => obs.observe(el));
 })();
 
 
-// ── 6. PARALLAX (subtle) ──
-(function () {
-  const img = document.querySelector('.hero-image');
-  if (!img) return;
+// ── 7. SUBTLE PARALLAX ────────────────────────
+(function initParallax() {
+  const couple = document.querySelector('.hero-couple');
+  if (!couple) return;
   window.addEventListener('scroll', () => {
     if (window.scrollY < window.innerHeight) {
-      img.style.transform = `translateY(${window.scrollY * 0.12}px)`;
+      couple.style.transform = `translateY(${window.scrollY * 0.11}px)`;
     }
   }, { passive: true });
 })();
 
 
-// ── 7. RSVP ──
-(function () {
-  const form = document.getElementById('rsvpForm');
-  const ok   = document.getElementById('rsvpOk');
-  if (!form) return;
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const btn = form.querySelector('.btn-rsvp');
-    btn.textContent = '⏳ Confirming...';
-    btn.disabled = true;
-    setTimeout(() => {
-      ok.style.display = 'block';
-      form.reset();
-      btn.textContent = '💌 Confirm Attendance';
-      btn.disabled = false;
-      ok.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }, 1200);
-  });
+// ── 8. BANANA TREE DEPTH ON SCROLL ────────────
+(function initBananaDepth() {
+  const bLeft  = document.querySelector('.bt-left');
+  const bRight = document.querySelector('.bt-right');
+  if (!bLeft || !bRight) return;
+  window.addEventListener('scroll', () => {
+    const s = window.scrollY * 0.08;
+    bLeft.style.transform  = `translateY(${s}px)`;
+    bRight.style.transform = `scaleX(-1) translateY(${s}px)`;
+  }, { passive: true });
 })();
