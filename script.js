@@ -81,7 +81,6 @@
 
 // ── 3. VIDEO BACKGROUND ────────────────────────
 (function initVideo() {
-  const dropZone  = document.getElementById('videoDropZone');
   const fileInput = document.getElementById('videoFileInput');
   const videoEl   = document.getElementById('bgVideo');
   const fallback  = document.getElementById('heroFallback');
@@ -92,22 +91,16 @@
     const url = URL.createObjectURL(file);
     videoEl.src = url;
     videoEl.style.display = 'block';
-    fallback.style.display = 'none';
-    dropZone && (dropZone.style.display = 'none');
+    if (fallback) fallback.style.display = 'none';
     videoEl.play().catch(() => {});
   }
 
+  // Hidden file input (can be triggered programmatically)
   fileInput && fileInput.addEventListener('change', e => loadVideo(e.target.files[0]));
 
-  // Drag & drop on hero
+  // Drag & drop video directly onto the hero
   const hero = document.getElementById('hero');
-  hero && hero.addEventListener('dragover', e => {
-    e.preventDefault();
-    dropZone && (dropZone.style.borderColor = 'var(--g-mid)');
-  });
-  hero && hero.addEventListener('dragleave', () => {
-    dropZone && (dropZone.style.borderColor = '');
-  });
+  hero && hero.addEventListener('dragover', e => e.preventDefault());
   hero && hero.addEventListener('drop', e => {
     e.preventDefault();
     loadVideo(e.dataTransfer.files[0]);
@@ -268,14 +261,3 @@
 })();
 
 
-// ── 8. BANANA TREE DEPTH ON SCROLL ────────────
-(function initBananaDepth() {
-  const bLeft  = document.querySelector('.bt-left');
-  const bRight = document.querySelector('.bt-right');
-  if (!bLeft || !bRight) return;
-  window.addEventListener('scroll', () => {
-    const s = window.scrollY * 0.08;
-    bLeft.style.transform  = `translateY(${s}px)`;
-    bRight.style.transform = `scaleX(-1) translateY(${s}px)`;
-  }, { passive: true });
-})();

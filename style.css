@@ -53,106 +53,11 @@ body {
   pointer-events: none; z-index: 9999; opacity: .55;
 }
 
-/* ══════════════════════════════════════════
-   BANANA TREES
-══════════════════════════════════════════ */
-.banana-tree {
-  position: fixed;
-  bottom: 0;
-  z-index: 50;
-  pointer-events: none;
-  width: 130px;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
-}
-.bt-left  { left: -10px; }
-.bt-right { right: -10px; transform: scaleX(-1); }
-
-/* Trunk */
-.bt-trunk {
-  width: 26px;
-  height: min(40vh, 340px);
-  background:
-    linear-gradient(to right,
-      #1e3d10 0%, #3a6b20 20%, #5a8f35 50%, #3a6b20 80%, #1e3d10 100%);
-  border-radius: 13px 13px 18px 18px;
-  box-shadow: inset -3px 0 8px rgba(0,0,0,.25), inset 2px 0 6px rgba(255,255,255,.06);
-  position: relative;
-}
-.bt-trunk::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 50%;
-  transform: translateX(-50%);
-  width: 4px; height: 100%;
-  background: rgba(255,255,255,.08);
-  border-radius: 2px;
-}
-
-.bt-base {
-  width: 50px; height: 14px;
-  background: radial-gradient(ellipse, #2a4a12 0%, transparent 80%);
-  border-radius: 50%;
-  margin-top: -4px;
-}
-
-/* Leaves */
-.bt-leaves {
-  position: absolute;
-  bottom: min(36vh, 310px);
-  left: 50%;
-  width: 0; height: 0;
-}
-
-.bt-leaf {
-  position: absolute;
-  left: -3px;
-  top: 0;
-  width: 170px;
-  height: 44px;
-  background:
-    radial-gradient(ellipse 50% 50% at 50% 50%,
-      #4a8c30 0%, #2d5a1b 55%, rgba(30,60,10,.0) 100%);
-  border-radius: 50%;
-  transform-origin: 3px 50%;
-  box-shadow: inset 0 2px 4px rgba(255,255,255,.08);
-}
-
-/* Midrib */
-.bt-leaf::after {
-  content: '';
-  position: absolute;
-  top: 50%; left: 5%; width: 88%; height: 1.5px;
-  background: linear-gradient(to right, rgba(255,255,255,.25), rgba(255,255,255,.05));
-  transform: translateY(-50%);
-  border-radius: 1px;
-}
-
-/* Individual leaf angles + sway animations */
-.bl-1 { animation: ls1 4.0s ease-in-out infinite; }
-.bl-2 { animation: ls2 4.3s ease-in-out infinite .3s; }
-.bl-3 { animation: ls3 4.6s ease-in-out infinite .6s; }
-.bl-4 { animation: ls4 4.4s ease-in-out infinite .9s; }
-.bl-5 { animation: ls5 4.2s ease-in-out infinite 1.2s; }
-.bl-6 { animation: ls6 4.5s ease-in-out infinite 1.5s; }
-.bl-7 { animation: ls7 4.1s ease-in-out infinite 1.8s; }
-
-@keyframes ls1 { 0%,100%{transform:rotate(-92deg)} 50%{transform:rotate(-86deg)} }
-@keyframes ls2 { 0%,100%{transform:rotate(-66deg)} 50%{transform:rotate(-60deg)} }
-@keyframes ls3 { 0%,100%{transform:rotate(-40deg)} 50%{transform:rotate(-34deg)} }
-@keyframes ls4 { 0%,100%{transform:rotate(-14deg)} 50%{transform:rotate(-8deg)}  }
-@keyframes ls5 { 0%,100%{transform:rotate(12deg)}  50%{transform:rotate(18deg)}  }
-@keyframes ls6 { 0%,100%{transform:rotate(36deg)}  50%{transform:rotate(42deg)}  }
-@keyframes ls7 { 0%,100%{transform:rotate(60deg)}  50%{transform:rotate(66deg)}  }
-
 /* ── NAV ───────────────────────────────────── */
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 500;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 15px 150px 15px 150px;
+  padding: 16px 40px;
   background: rgba(250,246,238,.1);
   backdrop-filter: blur(18px);
   border-bottom: 1px solid rgba(255,255,255,.18);
@@ -185,7 +90,7 @@ body {
   grid-template-columns: 1fr 1fr;
   align-items: center;
   gap: 30px;
-  padding: 100px 160px 80px;
+  padding: 110px 40px 80px;
   position: relative;
   overflow: hidden;
 }
@@ -221,25 +126,7 @@ body {
   background: rgba(255,255,255,.25);
 }
 
-/* Video drop zone */
-.video-drop-zone {
-  position: absolute;
-  top: 18px; right: 170px; z-index: 10;
-  display: flex; align-items: center; gap: 8px;
-  background: rgba(255,255,255,.7);
-  backdrop-filter: blur(12px);
-  border: 1.5px dashed rgba(74,124,53,.5);
-  border-radius: 50px;
-  padding: 8px 18px;
-  cursor: pointer;
-  font-family: var(--elegant); font-size: .85rem;
-  color: var(--g-dark);
-  transition: background .3s ease, border-color .3s ease;
-}
-.video-drop-zone:hover { background: rgba(255,255,255,.9); border-color: var(--g-mid); }
-.vdz-icon { font-size: 1.1rem; }
-.video-drop-zone p { font-size: .8rem; font-weight: 600; margin: 0; }
-.video-drop-zone small { font-size: .72rem; color: var(--textm); margin: 0; }
+
 
 /* Hero Content */
 .hero-content { position: relative; z-index: 2; }
@@ -866,35 +753,176 @@ body {
 .ft-credit { font-family: var(--sans); font-size: .75rem; color: rgba(255,255,255,.22); letter-spacing: 2px; }
 
 /* ══════════════════════════════════════════
-   RESPONSIVE
+   RESPONSIVE — Full Mobile Fix
 ══════════════════════════════════════════ */
+
+/* Large screens — tighten nav padding */
 @media (max-width: 1100px) {
   .nav { padding-left: 80px; padding-right: 80px; }
   .hero { padding-left: 90px; padding-right: 90px; }
-  .video-drop-zone { right: 90px; }
 }
-@media (max-width: 900px) {
+
+/* Tablet / Mobile — single panel slider */
+@media (max-width: 899px) {
+  /* Nav */
   .nav { padding: 14px 20px; }
-  .nav-links { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: rgba(253,248,240,.97); padding: 18px 20px; gap: 14px; box-shadow: 0 8px 24px rgba(0,0,0,.08); }
+  .nav-links {
+    display: none; flex-direction: column;
+    position: absolute; top: 100%; left: 0; right: 0;
+    background: rgba(253,248,240,.97);
+    padding: 18px 20px; gap: 14px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.08);
+  }
   .nav-links.open { display: flex; }
   .hamburger { display: flex; }
 
-  .hero { grid-template-columns: 1fr; padding: 100px 60px 70px; text-align: center; }
+  /* Hero */
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 100px 40px 70px;
+    text-align: center;
+  }
   .hero-names { align-items: center; }
   .hero-couple { justify-content: center; }
-  .hero-couple img { max-width: 280px; }
-  .video-drop-zone { top: auto; bottom: 20px; right: 50%; transform: translateX(50%); }
-  .banana-tree { display: none; }
+  .hero-couple img { max-width: 260px; }
 
-  .details-cards { grid-template-columns: 1fr; max-width: 380px; }
-  .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
-  .gi-tall { grid-row: span 1; }
-  .section-details, .section-gallery, .section-invite { padding: 60px 20px; }
+  /* ── INVITATION SLIDER ── */
+  .invite-slider-wrap { margin: 0 -10px; }
+  .invite-slider { border-radius: 16px; }
+
+  /* Each panel: full width, scrollable, good height */
+  .i-panel {
+    width: 100%;
+    min-height: auto;
+    max-height: 78vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  /* ── PANEL 1: COVER — mobile ── */
+  .panel-cover { padding: 28px 18px 22px; min-height: 500px; }
+  .pc-couple-names { font-size: 1.9rem; }
+  .pc-monogram { font-size: 3rem; }
+  .pc-img-wrap img { width: 155px; }
+
+  /* ── PANEL 2: MAIN INVITE — mobile ── */
+  .panel-main {
+    padding: 20px 16px;
+    gap: 10px;
+  }
+
+  /* Invocation */
+  .om { font-size: 1.9rem; }
+  .pm-deities { font-size: .88rem; line-height: 1.85; }
+  .pm-title-ta { font-size: 1.1rem; }
+
+  /* Muhurtham */
+  .pm-muh-text { font-size: .88rem; line-height: 1.85; }
+  .pm-time { font-size: .98rem; }
+
+  /* Person name */
+  .pm-person-name { flex-wrap: wrap; gap: 5px; }
+  .pm-person-name .ta { font-size: 1.1rem; }
+
+  /* Lineage — stack label above content on narrow screens */
+  .pm-lin-row {
+    grid-template-columns: 1fr;
+    gap: 1px;
+  }
+  .pm-lin-lbl {
+    color: var(--g-dark);
+    font-size: .78rem;
+    margin-bottom: 1px;
+  }
+  .pm-lin-row span:last-child {
+    font-size: .82rem;
+    padding-left: 10px;
+    border-left: 2px solid rgba(74,124,53,.25);
+  }
+
+  /* Weds connector */
+  .pw-text { font-size: .88rem; }
+
+  /* Venue */
+  .pm-venue-name { font-size: 1.05rem; }
+  .pm-invite-msg { font-size: .84rem; line-height: 1.8; }
+
+  /* Hosts — stack vertically */
+  .pm-hosts {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 14px;
+  }
+  .ph-sep { display: none; }
+  .ph-col {
+    border-bottom: 1px solid rgba(74,124,53,.15);
+    padding-bottom: 10px;
+    font-size: .85rem;
+  }
+  .ph-col:last-child { border-bottom: none; padding-bottom: 0; }
+  .ph-role { font-size: .72rem; }
+  .ph-num { font-size: .84rem; }
+
+  /* Siblings */
+  .pm-siblings { font-size: .84rem; line-height: 1.8; }
+
+  /* ── PANEL 3: RELATIVES — mobile ── */
+  .panel-relatives { padding: 22px 14px; }
+  .pr-heading { font-size: 1.05rem; }
+
+  .rel-cat { font-size: .82rem; }
+  .rel-block li { font-size: .84rem; line-height: 1.6; }
+  .rel-kids-list { font-size: .84rem; line-height: 1.75; }
+  .pr-closing { font-size: .9rem; }
+  .pr-closing-bold { font-size: 1.2rem; }
+
+  /* Section paddings */
+  .section-invite  { padding: 60px 12px 60px; }
+  .section-details { padding: 60px 20px; }
+  .section-gallery { padding: 60px 20px; }
   .section-countdown { padding: 70px 20px; }
+
+  /* Details grid — single column */
+  .details-cards { grid-template-columns: 1fr; max-width: 400px; }
+
+  /* Gallery — 2 cols */
+  .gallery-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    gap: 10px;
+  }
+  .gi-tall { grid-row: span 1; }
 }
-@media (max-width: 600px) {
-  .hero { padding: 90px 20px 60px; }
+
+/* Small phones */
+@media (max-width: 480px) {
+  .hero { padding: 90px 16px 60px; }
+  .hn-name { font-size: 3.2rem; }
+
+  /* Card panels even more compact */
+  .panel-main { padding: 18px 14px; gap: 8px; }
+  .panel-cover { padding: 24px 14px 18px; }
+  .panel-relatives { padding: 20px 12px; }
+
+  /* Tamil text comfortable size */
+  .pm-deities  { font-size: .9rem; }
+  .pm-muh-text { font-size: .9rem; }
+  .rel-block li { font-size: .86rem; }
+  .rel-kids-list { font-size: .86rem; }
+  .ph-col { font-size: .88rem; }
+
+  /* Countdown */
+  .cd-box { padding: 18px 18px; min-width: 74px; }
+  .cd-num { font-size: 2rem; }
+  .cd-lbl { font-size: .72rem; }
+
+  /* Gallery — single column */
   .gallery-grid { grid-template-columns: 1fr; }
-  .cd-box { padding: 18px 20px; min-width: 80px; }
-  .cd-num { font-size: 2.2rem; }
+
+  /* Slider nav buttons */
+  .sl-btn { width: 38px; height: 38px; font-size: 1.3rem; }
+  .sl-prev { left: -18px; }
+  .sl-next { right: -18px; }
 }
+

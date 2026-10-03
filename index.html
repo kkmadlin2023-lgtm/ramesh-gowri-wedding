@@ -14,34 +14,6 @@
 <!-- ═══ PETALS CANVAS ═══ -->
 <canvas id="petalsCanvas"></canvas>
 
-<!-- ═══ BANANA TREES (Fixed Left & Right) ═══ -->
-<div class="banana-tree bt-left" aria-hidden="true">
-  <div class="bt-leaves">
-    <div class="bt-leaf bl-1"></div>
-    <div class="bt-leaf bl-2"></div>
-    <div class="bt-leaf bl-3"></div>
-    <div class="bt-leaf bl-4"></div>
-    <div class="bt-leaf bl-5"></div>
-    <div class="bt-leaf bl-6"></div>
-    <div class="bt-leaf bl-7"></div>
-  </div>
-  <div class="bt-trunk"></div>
-  <div class="bt-base"></div>
-</div>
-<div class="banana-tree bt-right" aria-hidden="true">
-  <div class="bt-leaves">
-    <div class="bt-leaf bl-1"></div>
-    <div class="bt-leaf bl-2"></div>
-    <div class="bt-leaf bl-3"></div>
-    <div class="bt-leaf bl-4"></div>
-    <div class="bt-leaf bl-5"></div>
-    <div class="bt-leaf bl-6"></div>
-    <div class="bt-leaf bl-7"></div>
-  </div>
-  <div class="bt-trunk"></div>
-  <div class="bt-base"></div>
-</div>
-
 <!-- ═══ NAV ═══ -->
 <nav class="nav" id="navbar">
   <div class="nav-logo">R ♥ G</div>
@@ -70,13 +42,8 @@
     <div class="hero-overlay"></div>
   </div>
 
-  <!-- Video drop zone (shown when no video loaded) -->
-  <label class="video-drop-zone" id="videoDropZone" for="videoFileInput">
-    <span class="vdz-icon">🎬</span>
-    <p>உங்கள் திருமண வீடியோவை இங்கே இணைக்கவும்</p>
-    <small>Click or drag your wedding video here as background</small>
-    <input type="file" id="videoFileInput" accept="video/*" hidden/>
-  </label>
+  <!-- Video file input (hidden, no visible UI) -->
+  <input type="file" id="videoFileInput" accept="video/*" hidden/>
 
   <!-- Content -->
   <div class="hero-content">
