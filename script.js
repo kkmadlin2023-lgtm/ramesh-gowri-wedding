@@ -1,14 +1,14 @@
-/* ========================================
-   script.js – Ramesh & Gowri Wedding Site
-   ======================================== */
+/* =======================================
+   script.js – Ramesh & Gowri Wedding
+   Medium animations, clean & smooth
+   ======================================= */
 
-// ---- 1. FALLING PETALS (Canvas) ----
-(function initPetals() {
+// ── 1. FALLING PETALS (light) ──
+(function () {
   const canvas = document.getElementById('petalsCanvas');
-  const ctx    = canvas.getContext('2d');
-  let petals   = [];
-  const COLORS = ['#ffb7c5', '#ffc8d4', '#ff9eb5', '#ffa5a5', '#ffcba4', '#ffefd5'];
-  const SHAPES = ['🌸', '🌺', '🪷', '✿', '❀'];
+  const ctx = canvas.getContext('2d');
+  const EMOJIS = ['🌸', '🪷', '✿', '❀', '🌺'];
+  let petals = [];
 
   function resize() {
     canvas.width  = window.innerWidth;
@@ -18,315 +18,203 @@
   window.addEventListener('resize', resize);
 
   class Petal {
-    constructor() { this.reset(); }
-    reset() {
+    constructor() { this.reset(true); }
+    reset(init) {
       this.x     = Math.random() * canvas.width;
-      this.y     = -20;
-      this.size  = Math.random() * 14 + 8;
-      this.speed = Math.random() * 1.5 + 0.5;
-      this.sway  = Math.random() * 0.8 + 0.3;
-      this.swayOffset = Math.random() * Math.PI * 2;
-      this.rotation = Math.random() * Math.PI * 2;
-      this.rotSpeed = (Math.random() - 0.5) * 0.04;
-      this.shape = SHAPES[Math.floor(Math.random() * SHAPES.length)];
-      this.opacity = Math.random() * 0.6 + 0.3;
+      this.y     = init ? Math.random() * canvas.height : -20;
+      this.size  = Math.random() * 12 + 7;
+      this.speed = Math.random() * 1.2 + 0.4;
+      this.sway  = Math.random() * 0.7 + 0.2;
+      this.swayOff = Math.random() * Math.PI * 2;
+      this.rot   = Math.random() * Math.PI * 2;
+      this.rotSpd = (Math.random() - 0.5) * 0.03;
+      this.glyph = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+      this.alpha = Math.random() * 0.45 + 0.2;
     }
     update(t) {
       this.y += this.speed;
-      this.x += Math.sin(t * 0.001 + this.swayOffset) * this.sway;
-      this.rotation += this.rotSpeed;
-      if (this.y > canvas.height + 30) this.reset();
+      this.x += Math.sin(t * 0.0008 + this.swayOff) * this.sway;
+      this.rot += this.rotSpd;
+      if (this.y > canvas.height + 20) this.reset(false);
     }
     draw() {
       ctx.save();
-      ctx.globalAlpha = this.opacity;
+      ctx.globalAlpha = this.alpha;
       ctx.translate(this.x, this.y);
-      ctx.rotate(this.rotation);
-      ctx.font = `${this.size}px Arial`;
+      ctx.rotate(this.rot);
+      ctx.font = `${this.size}px serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(this.shape, 0, 0);
+      ctx.fillText(this.glyph, 0, 0);
       ctx.restore();
     }
   }
 
-  for (let i = 0; i < 28; i++) {
-    const p = new Petal();
-    p.y = Math.random() * window.innerHeight;
-    petals.push(p);
-  }
+  for (let i = 0; i < 20; i++) petals.push(new Petal());
 
-  function animate(t) {
+  (function loop(t) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     petals.forEach(p => { p.update(t); p.draw(); });
-    requestAnimationFrame(animate);
-  }
-  requestAnimationFrame(animate);
+    requestAnimationFrame(loop);
+  })(0);
 })();
 
 
-// ---- 2. NAVBAR SCROLL ----
-(function initNav() {
-  const nav = document.getElementById('navbar');
-  const ham = document.getElementById('hamburger');
-  const links = document.querySelector('.nav-links');
+// ── 2. NAVBAR ──
+(function () {
+  const nav  = document.getElementById('navbar');
+  const ham  = document.getElementById('hamburger');
+  const list = document.getElementById('navLinks');
 
   window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 60);
-  });
+    nav.classList.toggle('scrolled', window.scrollY > 55);
+  }, { passive: true });
 
-  ham.addEventListener('click', () => {
-    links.classList.toggle('open');
-  });
-
-  // Close on link click
-  document.querySelectorAll('.nav-links a').forEach(a => {
-    a.addEventListener('click', () => links.classList.remove('open'));
-  });
+  ham.addEventListener('click', () => list.classList.toggle('open'));
+  list.querySelectorAll('a').forEach(a => a.addEventListener('click', () => list.classList.remove('open')));
 })();
 
 
-// ---- 3. DRAGGABLE INVITATION CARD ----
-(function initDraggableCard() {
-  const card       = document.getElementById('inviteCard');
-  const scene      = document.getElementById('inviteScene');
-  const dragHint   = document.getElementById('dragHint');
-  let isDragging   = false;
-  let startX, startY, origLeft, origTop;
-  let moved        = false;
-  let dragThreshold = 5;
+// ── 3. DRAGGABLE INVITATION ──
+(function () {
+  const wrap = document.getElementById('inviteWrap');
+  const note = document.getElementById('dragNote');
+  if (!wrap) return;
 
-  // Center the card initially
-  function centerCard() {
-    const sr = scene.getBoundingClientRect();
-    const cw = card.offsetWidth;
-    const ch = card.offsetHeight;
-    card.style.left = ((sr.width - cw) / 2) + 'px';
-    card.style.top  = ((sr.height - ch) / 2) + 'px';
+  let drag = false, sx, sy, ox, oy, moved = false;
+  const THRESHOLD = 5;
+
+  function getOffset() {
+    const s = wrap.style;
+    return {
+      x: parseInt(s.marginLeft || '0') || 0,
+      y: parseInt(s.marginTop  || '0') || 0
+    };
   }
-  centerCard();
-  window.addEventListener('resize', centerCard);
 
-  // Mouse drag
-  card.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    moved      = false;
-    startX     = e.clientX;
-    startY     = e.clientY;
-    origLeft   = card.offsetLeft;
-    origTop    = card.offsetTop;
-    card.style.transition = 'none';
-    card.style.zIndex = '100';
-    dragHint.style.opacity = '0';
-    document.body.style.userSelect = 'none';
+  wrap.addEventListener('mousedown', e => {
+    drag = true; moved = false;
+    sx = e.clientX; sy = e.clientY;
+    const o = getOffset();
+    ox = o.x; oy = o.y;
+    wrap.classList.add('dragging');
+    note && (note.style.display = 'none');
     e.preventDefault();
   });
 
-  document.addEventListener('mousemove', (e) => {
-    if (!isDragging) return;
-    const dx = e.clientX - startX;
-    const dy = e.clientY - startY;
-    if (Math.abs(dx) > dragThreshold || Math.abs(dy) > dragThreshold) moved = true;
-    card.style.left = (origLeft + dx) + 'px';
-    card.style.top  = (origTop + dy) + 'px';
+  document.addEventListener('mousemove', e => {
+    if (!drag) return;
+    const dx = e.clientX - sx, dy = e.clientY - sy;
+    if (Math.abs(dx) > THRESHOLD || Math.abs(dy) > THRESHOLD) moved = true;
+    wrap.style.marginLeft = (ox + dx) + 'px';
+    wrap.style.marginTop  = (oy + dy) + 'px';
   });
 
   document.addEventListener('mouseup', () => {
-    if (!isDragging) return;
-    isDragging = false;
-    document.body.style.userSelect = '';
-    card.style.transition = 'box-shadow 0.3s ease, filter 0.3s ease';
+    if (!drag) return;
+    drag = false;
+    wrap.classList.remove('dragging');
   });
 
-  // Touch drag
-  card.addEventListener('touchstart', (e) => {
+  // Touch
+  wrap.addEventListener('touchstart', e => {
     const t = e.touches[0];
-    isDragging = true;
-    moved      = false;
-    startX     = t.clientX;
-    startY     = t.clientY;
-    origLeft   = card.offsetLeft;
-    origTop    = card.offsetTop;
-    card.style.transition = 'none';
-    card.style.zIndex = '100';
-    dragHint.style.opacity = '0';
+    drag = true; moved = false;
+    sx = t.clientX; sy = t.clientY;
+    const o = getOffset();
+    ox = o.x; oy = o.y;
+    note && (note.style.display = 'none');
   }, { passive: true });
 
-  document.addEventListener('touchmove', (e) => {
-    if (!isDragging) return;
+  document.addEventListener('touchmove', e => {
+    if (!drag) return;
     const t = e.touches[0];
-    const dx = t.clientX - startX;
-    const dy = t.clientY - startY;
-    if (Math.abs(dx) > dragThreshold || Math.abs(dy) > dragThreshold) moved = true;
-    card.style.left = (origLeft + dx) + 'px';
-    card.style.top  = (origTop + dy) + 'px';
+    const dx = t.clientX - sx, dy = t.clientY - sy;
+    if (Math.abs(dx) > THRESHOLD || Math.abs(dy) > THRESHOLD) moved = true;
+    wrap.style.marginLeft = (ox + dx) + 'px';
+    wrap.style.marginTop  = (oy + dy) + 'px';
     e.preventDefault();
   }, { passive: false });
 
-  document.addEventListener('touchend', () => { isDragging = false; });
-
-  // Flip on click (only if not dragged)
-  card.addEventListener('click', () => {
-    if (!moved) card.classList.toggle('flipped');
-  });
+  document.addEventListener('touchend', () => { drag = false; });
 })();
 
 
-// ---- 4. COUNTDOWN TIMER ----
-(function initCountdown() {
-  const wedding = new Date('2026-11-01T10:30:00+05:30');
+// ── 4. COUNTDOWN ──
+(function () {
+  const target = new Date('2026-11-01T10:30:00+05:30');
+  const els = {
+    days:  document.getElementById('cd-days'),
+    hours: document.getElementById('cd-hours'),
+    mins:  document.getElementById('cd-mins'),
+    secs:  document.getElementById('cd-secs')
+  };
 
-  function update() {
-    const now  = new Date();
-    const diff = wedding - now;
+  function pad(n, l = 2) { return String(n).padStart(l, '0'); }
+
+  function tick() {
+    const diff = target - Date.now();
     if (diff <= 0) {
-      document.getElementById('cd-days').textContent    = '000';
-      document.getElementById('cd-hours').textContent   = '00';
-      document.getElementById('cd-minutes').textContent = '00';
-      document.getElementById('cd-seconds').textContent = '00';
+      Object.values(els).forEach(el => { if (el) el.textContent = '00'; });
       return;
     }
-    const days    = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours   = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-    document.getElementById('cd-days').textContent    = String(days).padStart(3, '0');
-    document.getElementById('cd-hours').textContent   = String(hours).padStart(2, '0');
-    document.getElementById('cd-minutes').textContent = String(minutes).padStart(2, '0');
-    document.getElementById('cd-seconds').textContent = String(seconds).padStart(2, '0');
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000)  / 60000);
+    const s = Math.floor((diff % 60000)    / 1000);
+    if (els.days)  els.days.textContent  = pad(d, 3);
+    if (els.hours) els.hours.textContent = pad(h);
+    if (els.mins)  els.mins.textContent  = pad(m);
+    if (els.secs)  els.secs.textContent  = pad(s);
   }
-  update();
-  setInterval(update, 1000);
+  tick();
+  setInterval(tick, 1000);
 })();
 
 
-// ---- 5. SCROLL ANIMATIONS (Intersection Observer) ----
-(function initScrollAnimations() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
+// ── 5. SCROLL REVEAL ──
+(function () {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
       }
     });
-  }, { threshold: 0.15 });
+  }, { threshold: 0.12 });
 
-  document.querySelectorAll('.event-card, .family-card, .gallery-item, .cd-unit, .venue-info-box, .venue-map-container').forEach(el => {
-    observer.observe(el);
-  });
+  document.querySelectorAll('.reveal-card').forEach(el => obs.observe(el));
 })();
 
 
-// ---- 6. SMOOTH PARALLAX on hero ----
-(function initParallax() {
-  const hero = document.querySelector('.hero');
-  const illustration = document.querySelector('.couple-illustration');
-  if (!illustration) return;
-
+// ── 6. PARALLAX (subtle) ──
+(function () {
+  const img = document.querySelector('.hero-image');
+  if (!img) return;
   window.addEventListener('scroll', () => {
-    const scrolled = window.scrollY;
-    if (scrolled < window.innerHeight) {
-      illustration.style.transform = `translateY(${scrolled * 0.15}px)`;
+    if (window.scrollY < window.innerHeight) {
+      img.style.transform = `translateY(${window.scrollY * 0.12}px)`;
     }
   }, { passive: true });
 })();
 
 
-// ---- 7. VIDEO UPLOAD ----
-(function initVideoUpload() {
-  const placeholder = document.getElementById('videoPlaceholder');
-  const videoEl     = document.getElementById('weddingVideo');
-  const uploadInput = document.getElementById('videoUpload');
-
-  if (!placeholder) return;
-
-  placeholder.addEventListener('click', () => uploadInput.click());
-
-  uploadInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const url = URL.createObjectURL(file);
-    videoEl.src = url;
-    videoEl.style.display = 'block';
-    placeholder.style.display = 'none';
-  });
-
-  // Drag-and-drop video
-  placeholder.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    placeholder.style.borderColor = 'var(--gold)';
-  });
-  placeholder.addEventListener('dragleave', () => {
-    placeholder.style.borderColor = 'rgba(201,168,76,0.5)';
-  });
-  placeholder.addEventListener('drop', (e) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (!file || !file.type.startsWith('video/')) return;
-    const url = URL.createObjectURL(file);
-    videoEl.src = url;
-    videoEl.style.display = 'block';
-    placeholder.style.display = 'none';
-  });
-})();
-
-
-// ---- 8. RSVP FORM ----
-(function initRSVP() {
-  const form    = document.getElementById('rsvpForm');
-  const success = document.getElementById('rsvpSuccess');
+// ── 7. RSVP ──
+(function () {
+  const form = document.getElementById('rsvpForm');
+  const ok   = document.getElementById('rsvpOk');
   if (!form) return;
-
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', e => {
     e.preventDefault();
     const btn = form.querySelector('.btn-rsvp');
-    btn.textContent = '⏳ Sending...';
+    btn.textContent = '⏳ Confirming...';
     btn.disabled = true;
-
     setTimeout(() => {
-      success.style.display = 'block';
+      ok.style.display = 'block';
       form.reset();
-      btn.textContent = '💌 Confirm RSVP';
+      btn.textContent = '💌 Confirm Attendance';
       btn.disabled = false;
-      success.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 1500);
+      ok.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 1200);
   });
-})();
-
-
-// ---- 9. 3D TILT EFFECT on invitation card ----
-(function initTilt() {
-  const card = document.getElementById('inviteCard');
-  if (!card) return;
-
-  card.addEventListener('mousemove', (e) => {
-    if (card.style.cursor === 'grabbing') return;
-    const rect   = card.getBoundingClientRect();
-    const cx     = rect.left + rect.width  / 2;
-    const cy     = rect.top  + rect.height / 2;
-    const rx     = ((e.clientY - cy) / (rect.height / 2)) * 8;
-    const ry     = ((e.clientX - cx) / (rect.width  / 2)) * -8;
-    card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) scale(1.02)`;
-  });
-
-  card.addEventListener('mouseleave', () => {
-    card.style.transform = '';
-  });
-})();
-
-
-// ---- 10. NAV SMOOTH HIGHLIGHT ----
-(function initNavHighlight() {
-  const sections = document.querySelectorAll('section[id]');
-  const links    = document.querySelectorAll('.nav-links a');
-
-  window.addEventListener('scroll', () => {
-    let current = '';
-    sections.forEach(s => {
-      if (window.scrollY >= s.offsetTop - 100) current = s.id;
-    });
-    links.forEach(a => {
-      a.style.color = a.getAttribute('href') === `#${current}` ? 'var(--maroon)' : '';
-    });
-  }, { passive: true });
 })();
