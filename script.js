@@ -2,12 +2,12 @@
    script.js – Ramesh & Gowri Wedding
    ============================================== */
 
-// ── 1. FALLING PETALS ──────────────────────────
+// ── 1. FALLING PETALS (Calm & Serene) ─────────
 (function initPetals() {
   const canvas = document.getElementById('petalsCanvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  const GLYPHS = ['🌸', '🪷', '✿', '❀', '🌺', '🌼'];
+  const GLYPHS = ['🌸', '🪷', '✿', '❀', '🌺'];
   let petals = [];
 
   function resize() {
@@ -21,18 +21,18 @@
     constructor(init) {
       this.x     = Math.random() * canvas.width;
       this.y     = init ? Math.random() * canvas.height : -20;
-      this.size  = Math.random() * 12 + 6;
-      this.speed = Math.random() * 1.1 + 0.4;
-      this.sway  = Math.random() * 0.7 + 0.2;
+      this.size  = Math.random() * 10 + 6;
+      this.speed = Math.random() * 0.4 + 0.22; // Calm, gentle drifting
+      this.sway  = Math.random() * 0.35 + 0.15;
       this.off   = Math.random() * Math.PI * 2;
       this.rot   = Math.random() * Math.PI * 2;
-      this.rotS  = (Math.random() - 0.5) * 0.025;
+      this.rotS  = (Math.random() - 0.5) * 0.012; // Slow graceful spin
       this.glyph = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
-      this.alpha = Math.random() * 0.4 + 0.15;
+      this.alpha = Math.random() * 0.28 + 0.12; // Subtle, elegant opacity
     }
     update(t) {
       this.y += this.speed;
-      this.x += Math.sin(t * 0.0007 + this.off) * this.sway;
+      this.x += Math.sin(t * 0.0005 + this.off) * this.sway;
       this.rot += this.rotS;
       if (this.y > canvas.height + 20) {
         this.x = Math.random() * canvas.width;
@@ -52,7 +52,7 @@
     }
   }
 
-  for (let i = 0; i < 22; i++) petals.push(new Petal(true));
+  for (let i = 0; i < 18; i++) petals.push(new Petal(true));
 
   (function loop(t) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
